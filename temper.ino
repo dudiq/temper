@@ -24,8 +24,35 @@ DHT dht(DHTPIN, DHTTYPE);
 
 SSD1306AsciiWire oled;
 
-//------------------------------------------------------------------------------
+void renderTemp(float t) {
+  oled.set2X();
+  oled.setCursor(2, 1);
+  String tempStr = String(int(t));
+  if (tempStr.length() == 1) tempStr = ' ' + tempStr;
+  oled.print(tempStr);
+  
+  oled.set1X();
+  oled.setCursor(26, 1);   
+  oled.print("'C");
+}
+
+void renderHum(float h) {
+  oled.set2X();
+  oled.setCursor(60, 1);
+  String humStr = String(int(h));
+  if (humStr .length() == 1) humStr  = ' ' + humStr ;
+
+  oled.print(humStr);
+
+  oled.set1X();
+  oled.setCursor(84, 1);   
+  oled.print("%");
+}
+
+
 void setup() {
+  delay(5000);
+  
   dht.begin();
   
   Wire.begin();
@@ -61,10 +88,9 @@ void loop() {
     delay(2000);
     return;
   }
-  oled.setCursor(2, 1);   
-  oled.println(String(int(t)) + "'C");
 
-  oled.setCursor(80, 1);  
-  oled.println(String(int(h)) + "%");
+  renderTemp(t);
+  renderHum(h);
+  
   delay(2000);
 }
